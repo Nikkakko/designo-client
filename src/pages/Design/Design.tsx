@@ -20,16 +20,20 @@ import {
   GraphicDesignTablet,
   WebDesignTablet,
 } from '../../assets/home/tablet';
+import Loader from '../../components/Loader';
 
 const Design = () => {
   const { category } = useParams();
   const [data, setData] = useState<ProjectType[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
+        setLoading(true);
         const res = await getCategoryProjects(category as string);
         setData(res.data);
+        setLoading(false);
       } catch (error) {
         console.log(error);
       }
@@ -37,6 +41,8 @@ const Design = () => {
 
     fetchData();
   }, [category]);
+
+  if (loading) return <Loader />;
 
   const bannerDescription =
     category === 'web'
